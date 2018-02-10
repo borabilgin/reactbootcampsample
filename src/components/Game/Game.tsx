@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Board from '../Board/Board';
 import calculateWinner from '../../util/CalculateWinner';
+// if you don't import your resources (e.g. CSS or graphics), Webpack will get rid of them during tree shaking
+import './Game.css';
 
 interface SquareArray {
     [key: number]: string;
