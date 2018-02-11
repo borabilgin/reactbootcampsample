@@ -2,6 +2,10 @@
 import { Observable } from 'rx';
 import { DOM } from 'rx-dom';
 
+export interface WikipediaItem {
+    msg: string;
+}
+
 class HttpService {
     genericRequest<T>(url: string, methodName: string, body?: {}): Observable<T> {                   
         return DOM.ajax(
@@ -52,6 +56,10 @@ class HttpService {
 
     deleteCustom<T>(url: string, body?: {}): Observable<T> {        
         return this.genericRequest(url, 'DELETE', body);
+    }
+
+    getWikiEntry(): Observable<WikipediaItem> {
+        return this.getCustom<WikipediaItem>('http://demo9185611.mockable.io/');
     }
 }
 
