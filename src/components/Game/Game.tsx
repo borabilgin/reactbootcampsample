@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Board from '../Board/Board';
-import calculateWinner from '../../util/CalculateWinner';
+import HttpService from '../../util/HttpService';
 // if you don't import your resources (e.g. CSS or graphics), Webpack will get rid of them during tree shaking
 import './Game.css';
 
@@ -18,6 +18,7 @@ interface GameState {
     history: Squares[];
     stepNumber: number;
     xIsNext: boolean;
+    winner: string;
 }
 
 class Game extends React.Component<{}, GameState> {
@@ -29,7 +30,8 @@ class Game extends React.Component<{}, GameState> {
         this.state = {
             history: [{ squares: Array(9).fill(null) }],
             stepNumber: 0,
-            xIsNext: true
+            xIsNext: true,
+            winner: '',
         };
     }
 
@@ -38,19 +40,19 @@ class Game extends React.Component<{}, GameState> {
         // last entry
         const current = history[history.length - 1];
         const squares = current.squares.slice();
-
-        // if there is a winner, or is the squares array is already filled in that location, return
-        if (calculateWinner(squares as [string]) || squares[i]) {
-            return;
-        }
-
         squares[i] = this.state.xIsNext ? 'X' : 'O';
+        let winner = '';
 
-        this.setState({
-            history: history.concat([{squares}]),
-            stepNumber: history.length,
-            xIsNext: !this.state.xIsNext
+        HttpService.getWinner(squares as [string] || squares[i]).subscribe(res => {
+            winner = JSON.parse(res.response);
+            this.setState({
+                history: history.concat([{squares}]),
+                stepNumber: history.length,
+                xIsNext: !this.state.xIsNext,
+                winner
+            });
         });
+
     }
 
     jumpTo(step: number) {
@@ -63,7 +65,7 @@ class Game extends React.Component<{}, GameState> {
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
-        const winner = calculateWinner(current.squares as [string]);
+        const winner = this.state.winner;
 
         let status;
 

@@ -61,6 +61,18 @@ class HttpService {
     getWikiEntry(): Observable<WikipediaItem> {
         return this.getCustom<WikipediaItem>('http://demo9185611.mockable.io/');
     }
+
+    getWinner(squares: any) {
+        const body = { squares };
+        return Rx.DOM.ajax({
+            method: 'POST',
+            url: 'http://localhost:8080/api/winner',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }
 }
 
 export default new HttpService();
