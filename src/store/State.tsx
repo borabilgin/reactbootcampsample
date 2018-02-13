@@ -13,4 +13,5 @@ export interface GameState {
     history: Squares[];
     stepNumber: number;
     xIsNext: boolean;
+    lastWinner: string;
 }

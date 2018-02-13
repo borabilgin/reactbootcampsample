@@ -12,6 +12,7 @@ interface GameProps {
     stepNumber: number;
     xIsNext: boolean;
     onGameMove: (history: Squares[], stepNumber: number, xIsNext: boolean) => actions.Move;
+    onWin: (winner: string) => actions.Win;
 }
 
 class Game extends React.Component<GameProps, {}> {
@@ -35,8 +36,15 @@ class Game extends React.Component<GameProps, {}> {
         const current = history[history.length - 1];
         const squares = current.squares.slice();
 
+        const winner = calculateWinner(squares as [string]);
         // if there is a winner, or is the squares array is already filled in that location, return
-        if (calculateWinner(squares as [string]) || squares[i]) {
+        if (winner) {
+            // let redux know
+            this.props.onWin(winner);
+            return;   
+        }
+
+        if (squares[i]) {
             return;
         }
 
@@ -47,6 +55,22 @@ class Game extends React.Component<GameProps, {}> {
             history.length,
             !this.props.xIsNext
         );
+    }
+
+    componentWillReceiveProps(newProps: GameProps) {
+        // we got new props - check if there's a winner
+        const history = newProps.history;
+        // last entry
+        const current = history[history.length - 1];
+        const squares = current.squares.slice();
+
+        const winner = calculateWinner(squares as [string]);
+        // if there is a winner, or is the squares array is already filled in that location, return
+        if (winner) {
+            // let redux know
+            this.props.onWin(winner);
+            return;   
+        }
     }
 
     jumpTo(step: number) {
@@ -114,7 +138,8 @@ export function mapStateToProps(state: GameState) {
 export function mapDispatchToProps(dispatch: Dispatch<actions.GameAction>) {
     return {
         // tslint:disable-next-line:max-line-length
-        onGameMove: (history: Squares[], stepNumber: number, xIsNext: boolean) => dispatch(actions.move(history, stepNumber, xIsNext))
+        onGameMove: (history: Squares[], stepNumber: number, xIsNext: boolean) => dispatch(actions.move(history, stepNumber, xIsNext)),
+        onWin: (winner: string) => dispatch(actions.win(winner))
     };
 }
 

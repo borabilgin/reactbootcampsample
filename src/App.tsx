@@ -2,6 +2,7 @@ import * as React from 'react';
 import './App.css';
 import Game from './components/Game/Game';
 import About from './components/About/About';
+import LastWinner from './components/LastWinner/LastWinner';
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 import { WithData } from './components/HoC/WithData';
 import { Provider } from 'react-redux';
@@ -24,6 +25,7 @@ class App extends React.Component {
               <h1 className="App-title">Tic Tac Toe</h1>
               <NavLink exact={true} to="/"  className="menu-link" activeClassName="active">Game</NavLink>
               <NavLink exact={true} to="/about" className="menu-link" activeClassName="active">About</NavLink>
+              <LastWinner />
             </header>        
             <Route path="/about" component={AboutCmp} />
             <Route exact={true} path="/" component={Game} />
