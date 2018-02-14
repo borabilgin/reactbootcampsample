@@ -12,7 +12,7 @@ it('renders without crashing', () => {
  * Tests like these can be considered the minimum, 
  * and act as a smoke-test to verify your component
  * at least renders
- **/
+ */
 
 it('renders without crashing with enzyme', () => {
   shallow(<App />);
