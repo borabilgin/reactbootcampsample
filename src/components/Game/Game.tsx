@@ -3,66 +3,87 @@ import Board from '../Board/Board';
 import calculateWinner from '../../util/CalculateWinner';
 // if you don't import your resources (e.g. CSS or graphics), Webpack will get rid of them during tree shaking
 import './Game.css';
+import * as actions from '../../store/actions';
+import { Squares, GameState } from '../../store/State';
+import { connect, Dispatch } from 'react-redux';
 
-interface SquareArray {
-    [key: number]: string;
-}
-
-interface Squares {
-    // typescript array indexer example
-    // array key is index, value is string
-    squares: SquareArray[];
-}
-
-interface GameState {
+interface GameProps {
     history: Squares[];
     stepNumber: number;
     xIsNext: boolean;
+    onGameMove: (history: Squares[], stepNumber: number, xIsNext: boolean) => actions.Move;
+    onWin: (winner: string) => actions.Win;
 }
 
-class Game extends React.Component<{}, GameState> {
-    constructor(props: {}, state: GameState) {
+class Game extends React.Component<GameProps, {}> {
+    constructor(props: GameProps, state: {}) {
         // always need to call super first with passed in props and state 
         super(props, state);
-        // now we can set the initial state
-        // normally you have to call setState, but in constructor we first need to create the state object
-        this.state = {
-            history: [{ squares: Array(9).fill(null) }],
-            stepNumber: 0,
-            xIsNext: true
-        };
+
+        // no need for local state now that we're using redux
+        // // now we can set the initial state
+        // // normally you have to call setState, but in constructor we first need to create the state object
+        // this.state = {
+        //     history: [{ squares: Array(9).fill(null) }],
+        //     stepNumber: 0,
+        //     xIsNext: true
+        // };
     }
 
     handleClick(i: number) {
-        const history = this.state.history;
+        const history = this.props.history;
         // last entry
         const current = history[history.length - 1];
         const squares = current.squares.slice();
 
+        const winner = calculateWinner(squares as [string]);
         // if there is a winner, or is the squares array is already filled in that location, return
-        if (calculateWinner(squares as [string]) || squares[i]) {
+        if (winner) {
+            // let redux know
+            this.props.onWin(winner);
+            return;   
+        }
+
+        if (squares[i]) {
             return;
         }
 
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        squares[i] = this.props.xIsNext ? 'X' : 'O';
 
-        this.setState({
-            history: history.concat([{squares}]),
-            stepNumber: history.length,
-            xIsNext: !this.state.xIsNext
-        });
+        this.props.onGameMove(
+            history.concat([{squares}]),
+            history.length,
+            !this.props.xIsNext
+        );
+    }
+
+    componentWillReceiveProps(newProps: GameProps) {
+        // we got new props - check if there's a winner
+        const history = newProps.history;
+        // last entry
+        const current = history[history.length - 1];
+        const squares = current.squares.slice();
+
+        const winner = calculateWinner(squares as [string]);
+        // if there is a winner, or is the squares array is already filled in that location, return
+        if (winner) {
+            // let redux know
+            this.props.onWin(winner);
+            return;   
+        }
     }
 
     jumpTo(step: number) {
-        this.setState({
-            stepNumber: step,
-            xIsNext: (step % 2) ? false : true
-        });
+        this.props.onGameMove(
+            this.props.history.slice(0, step + 1),
+            step,
+            (step % 2) ? false : true,
+        );
     }
 
     render() {
-        const history = this.state.history;
-        const current = history[this.state.stepNumber];
+        const history = this.props.history;
+        const current = history[this.props.stepNumber];
         const winner = calculateWinner(current.squares as [string]);
 
         let status;
@@ -70,7 +91,7 @@ class Game extends React.Component<{}, GameState> {
         if (winner) {
             status = 'Winner: ' + winner;
         } else {
-            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+            status = 'Next player: ' + (this.props.xIsNext ? 'X' : 'O');
         }
 
         const moves = history.map((step: Squares, move: number) => {
@@ -102,4 +123,24 @@ class Game extends React.Component<{}, GameState> {
     }
 }
 
-export default Game;
+// Takes the global application state, and maps it to our Component props
+// So our component props are always created by the global app state
+export function mapStateToProps(state: GameState) {
+    return {
+        history: state.history,
+        stepNumber: state.stepNumber,
+        xIsNext: state.xIsNext
+    };
+}
+
+// this binds the action handler method (i.e. onGameMove) to a method in our props,
+// so that we can call it like myprops.onGameMove and the action handler will be triggerred
+export function mapDispatchToProps(dispatch: Dispatch<actions.GameAction>) {
+    return {
+        // tslint:disable-next-line:max-line-length
+        onGameMove: (history: Squares[], stepNumber: number, xIsNext: boolean) => dispatch(actions.move(history, stepNumber, xIsNext)),
+        onWin: (winner: string) => dispatch(actions.win(winner))
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game);
