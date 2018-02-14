@@ -9,9 +9,7 @@ describe('actions', () => {
     // the right action was returned
     it('should create an action to make a move', () => {
         const history: Squares[] = [
-            { squares: ['X', 'O', ''] },
-            { squares: ['', '', ''] },
-            { squares: ['', '', ''] }
+            { squares: ['X', 'O', '', '', '', '', '', '', ''] }
         ];
         const stepNumber: number = 3;
         const xIsNext: boolean = true;
