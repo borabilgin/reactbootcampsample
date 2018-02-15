@@ -1,5 +1,6 @@
 import * as constants from '../constants';
 import { Squares } from '../State';
+// import { Observable } from 'rx-dom';
 
 // define action payload for MOVE
 export interface Move {

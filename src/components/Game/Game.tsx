@@ -40,7 +40,7 @@ class Game extends React.Component<GameProps, {}> {
         // if there is a winner, or is the squares array is already filled in that location, return
         if (winner) {
             // let redux know
-            this.props.onWin(winner);
+            // this.props.onWin(winner);
             return;   
         }
 
@@ -68,7 +68,7 @@ class Game extends React.Component<GameProps, {}> {
         // if there is a winner, or is the squares array is already filled in that location, return
         if (winner) {
             // let redux know
-            this.props.onWin(winner);
+            // this.props.onWin(winner);
             return;   
         }
     }
