@@ -6,8 +6,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import { AjaxResponse } from 'rxjs/observable/dom/AjaxObservable';
 
-// const url = 'https://bootcamp-todo-api.herokuapp.com/api/winner';
-const url = 'http://localhost:8080/api/winner';
+const url = 'https://bootcamp-todo-api.herokuapp.com/api/winner';
+// const url = 'http://localhost:8080/api/winner';
 
 export const rootEpic = (action$: any) =>
     action$.ofType(constants.MOVE)
