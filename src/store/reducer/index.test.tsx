@@ -1,6 +1,6 @@
 import * as reducer from './index';
 import * as types from '.././constants/index';
-import * as actions from '../actions/index'
+import * as actions from '../actions/index';
 import { GameState } from '../State';
 
 describe('reducer tests', () => {
