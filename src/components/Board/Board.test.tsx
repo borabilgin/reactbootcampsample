@@ -21,7 +21,22 @@ describe('Board', () => {
         const spy = jest.fn();
         props.onClick = spy;
         mountedBoard.setProps(props);
-        mountedBoard.find('.board-row').find(Square).first().simulate('click');
+        mountedBoard.find(Square).first().simulate('click');
         expect(spy).toHaveBeenCalled();
+    });
+
+    it('should render 9 squares', () => {
+        expect(mountedBoard.find(Square).length).toEqual(9);
+    });
+
+    //Snapshot test
+    it('should render 9 squares', () => {
+        expect(mountedBoard.find(Square).length).toMatchSnapshot();
+    });
+
+    //Snapshot of render
+    it('should render 9 squares', () => {
+        const wrapper = shallow(<Board {...props}/>);
+        expect(wrapper).toMatchSnapshot();
     });
 });
