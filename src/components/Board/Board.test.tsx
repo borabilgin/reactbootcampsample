@@ -6,13 +6,13 @@ import Square from './../Square/Square';
 describe('Board', () => {
 
     let mountedBoard: any;
-    let props : BoardProps = {
+    let props: BoardProps = {
         squares: [],
-        onClick: ()=>undefined
+        onClick: () => undefined
     };
 
     beforeEach(() => {
-        mountedBoard = shallow(<Board {...props}/>)
+        mountedBoard = shallow(<Board {...props} />);
     });
 
     // Not that useful of a test, but demo's how to simulate an event 
@@ -29,14 +29,14 @@ describe('Board', () => {
         expect(mountedBoard.find(Square).length).toEqual(9);
     });
 
-    //Snapshot test
+    // Snapshot test
     it('should render 9 squares', () => {
         expect(mountedBoard.find(Square).length).toMatchSnapshot();
     });
 
-    //Snapshot of render
+    // Snapshot of render
     it('should render 9 squares', () => {
-        const wrapper = shallow(<Board {...props}/>);
+        const wrapper = shallow(<Board {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
 });
