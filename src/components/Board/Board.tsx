@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Square from '../Square/Square';
 
-interface BoardProps {
+export interface BoardProps {
     squares: string[];
     onClick: (i: number) => any;
 }

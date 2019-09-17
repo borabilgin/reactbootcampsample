@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Board should render 9 squares 1`] = `9`;
+
+exports[`Board should render 9 squares 2`] = `
+<div>
+  <div
+    className="board-row"
+  >
+    <Square
+      onClick={[Function]}
+    />
+    <Square
+      onClick={[Function]}
+    />
+    <Square
+      onClick={[Function]}
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <Square
+      onClick={[Function]}
+    />
+    <Square
+      onClick={[Function]}
+    />
+    <Square
+      onClick={[Function]}
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <Square
+      onClick={[Function]}
+    />
+    <Square
+      onClick={[Function]}
+    />
+    <Square
+      onClick={[Function]}
+    />
+  </div>
+</div>
+`;
